@@ -1,0 +1,29 @@
+name: Build Typst document
+on: [push, workflow_dispatch]
+
+permissions:
+  contents: write
+
+jobs:
+  build_typst_documents:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Typst
+        uses: typst-community/setup-typst@v3
+      
+      - name: fonts list
+        run: typst fonts
+
+      - name: Compile
+        run: typst compile --font-path ./fonts main.typ paper.pdf
+      
+      - name: Upload PDF file
+        uses: actions/upload-artifact@v4
+        with:
+          name: paper
+          path: paper.pdf
+
+     
